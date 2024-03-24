@@ -1,0 +1,13 @@
+body {
+    width: fit-content;
+    text-align: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+#volume-slider {
+    width: 15rem;
+}
