@@ -3,6 +3,7 @@ import { setSavedGain, setGain, getCurrentTab } from "../modules/set-gain.js";
 const volumeSlider = document.getElementById("volume-slider");
 const volumeOutput = document.getElementById("volume");
 
+volumeOutput.textContent = volumeSlider.value + "%";
 setSavedGain().then((gain) => {
     volumeSlider.value = gain * 100;
     volumeOutput.textContent = volumeSlider.value + "%";
