@@ -9,6 +9,12 @@ body {
 .column {
     display: flex;
     flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+.labeled-checkbox {
+    display: flex;
+    align-items: center;
 }
 
 #volume-slider {

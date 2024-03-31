@@ -6,10 +6,16 @@
   </head>
 
   <body>
-    <div class="column center-text">
-      <label for="volume-slider" id="volume-label">Setting the volume for </label>
-      <input type="range" min="0" max="800" value="100" id="volume-slider"/>
-      <output id="volume"></output>
+    <div class="column">
+      <div class="labeled-checkbox">
+        <input type="checkbox" id="boost-checkbox"/>
+        <label for="enable-box">Boost</label>
+      </div>
+      <div class="center-text">
+        <label for="volume-slider" id="volume-label">Setting the volume for </label>
+        <input type="range" min="0" max="100" value="100" id="volume-slider"/>
+        <output id="volume"></output>
+      </div>
     </div>
     <script type="module" src="popup.js"></script>
   </body>
