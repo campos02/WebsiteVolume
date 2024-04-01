@@ -1,9 +1,9 @@
 import { setSavedGain, setGain, getCurrentTab } from "../modules/set-gain.js";
 
 const boostCheckbox = document.getElementById("boost-checkbox");
-const volumeLabel = document.getElementById("volume-label");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeOutput = document.getElementById("volume");
+const displayedWebsite = document.getElementById("website");
 
 async function setSelectedGain() {
     volumeOutput.textContent = volumeSlider.value + "%";
@@ -33,7 +33,7 @@ setSavedGain().then(async (gain) => {
     const tab = await getCurrentTab();
     const website = new URL(tab.url).hostname;
 
-    volumeLabel.innerText = `Setting the volume for ${website}:`;
+    displayedWebsite.innerText = website;
 
     if (gain > 1) {
         volumeSlider.max = 800;

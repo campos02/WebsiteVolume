@@ -1,22 +1,62 @@
 body {
     width: fit-content;
+    background-color: #242424;
+    color: #fcfcfc;
+    font-weight: bold;
+    text-align: center;
 }
 
-.center-text {
-    text-align: center;
+input[type="checkbox"] {
+    accent-color: #616161;
+}
+
+input[type="range"] {
+    accent-color: #c2c2c2;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    background: #4b4b4b;
+    border-radius: 0.5rem;
+    margin-top: 0.15rem;
+}
+
+input[type="range"]::-moz-range-track {
+    background: #4b4b4b;
+    border-radius: 0.5rem;
+    margin-top: 0.15rem;
 }
 
 .column {
     display: flex;
     flex-direction: column;
-    row-gap: 0.5rem;
+    align-items: center;
 }
 
-.labeled-checkbox {
+.input-with-label {
     display: flex;
     align-items: center;
 }
 
+.setter-label {
+    font-size: 0.85rem;
+}
+
+.boost-checkbox {
+    margin-top: 0.7rem;
+    margin-bottom: 0.1rem;
+}
+
+#boost-checkbox {
+    width: 1rem;
+    height: 1.3rem;
+    margin-right: 0.25rem;
+}
+
 #volume-slider {
     width: 15rem;
+    margin-right: 0.4rem;
+}
+
+#volume {
+    width: 2rem;
 }

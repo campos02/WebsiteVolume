@@ -6,15 +6,18 @@
   </head>
 
   <body>
+    <h1>Website Volume Control</h1>
     <div class="column">
-      <div class="labeled-checkbox">
+      <div class="input-with-label boost-checkbox">
         <input type="checkbox" id="boost-checkbox"/>
-        <label for="enable-box">Boost</label>
+        <label for="enable-box">Go past 100%</label>
       </div>
-      <div class="center-text">
-        <label for="volume-slider" id="volume-label">Setting the volume for </label>
-        <input type="range" min="0" max="100" value="100" id="volume-slider"/>
-        <output id="volume"></output>
+      <div>
+        <label class="setter-label" for="volume-slider" id="website"></label>
+        <div class="input-with-label">
+          <input type="range" min="0" max="100" value="100" id="volume-slider"/>
+          <output id="volume"></output>
+        </div>
       </div>
     </div>
     <script type="module" src="popup.js"></script>
