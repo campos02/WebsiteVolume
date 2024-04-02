@@ -8,16 +8,16 @@
   <body>
     <h1>Website Volume</h1>
     <div class="column">
-      <div class="input-with-label boost-checkbox">
-        <input type="checkbox" id="boost-checkbox"/>
-        <label for="enable-box">Go past 100%</label>
-      </div>
       <div>
         <label class="setter-label" for="volume-slider" id="website"></label>
-        <div class="input-with-label">
+        <div class="labeled-input">
           <input type="range" min="0" max="100" value="100" id="volume-slider"/>
           <output id="volume"></output>
         </div>
+      </div>
+      <div class="labeled-input boost-checkbox">
+        <input type="checkbox" id="boost-checkbox"/>
+        <label for="enable-box">Go past 100%</label>
       </div>
     </div>
     <script type="module" src="popup.js"></script>

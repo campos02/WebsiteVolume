@@ -32,7 +32,7 @@ input[type="range"]::-moz-range-track {
     align-items: center;
 }
 
-.input-with-label {
+.labeled-input {
     display: flex;
     align-items: center;
 }
@@ -43,7 +43,6 @@ input[type="range"]::-moz-range-track {
 
 .boost-checkbox {
     margin-top: 0.7rem;
-    margin-bottom: 0.1rem;
 }
 
 #boost-checkbox {
@@ -54,9 +53,10 @@ input[type="range"]::-moz-range-track {
 
 #volume-slider {
     width: 15rem;
-    margin-right: 0.4rem;
+    margin-right: 0.3rem;
 }
 
 #volume {
+    margin-top: 0.21rem;
     width: 2rem;
 }
