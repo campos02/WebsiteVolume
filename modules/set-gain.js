@@ -1,10 +1,18 @@
+/**
+ * Queries the active tab on the last focused window, i.e. the one the user is currently in
+ * @returns Active tab found
+ */
 export async function getCurrentTab() {
     const queryOptions = { active: true, lastFocusedWindow: true };
     const [tab] = await chrome.tabs.query(queryOptions);
-
     return tab;
 }
 
+/**
+ * Sends a message for the offscreen document to set the provided gain on the provided tab and save it in storage
+ * @param {tab} tab - Tab that will have its gain modified
+ * @param {number} gain - Gain value to set
+ */
 export async function setGain(tab, gain) {
     // Create offscreen document if it doesn't exist
     const existingContexts = await chrome.runtime.getContexts({});
@@ -33,12 +41,17 @@ export async function setGain(tab, gain) {
     }
 }
 
+/**
+ * Retrieves from storage the last saved gain value for the current website and sets it
+ * @returns Retrieved gain value if found, otherwise returns a gain of 1
+ */
 export async function setSavedGain() {
     const websites = (await chrome.storage.sync.get(["websites"])).websites;
     const tab = await getCurrentTab();
     const website = new URL(tab.url).hostname;
     const lastWebsite = websites.findLast((site) => site.website === website);
 
+    // Gain of 1, aka same volume, if not found
     if (!lastWebsite)
         return 1;
 

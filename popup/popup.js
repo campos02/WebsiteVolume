@@ -5,12 +5,14 @@ const volumeSlider = document.getElementById("volume-slider");
 const volumeOutput = document.getElementById("volume");
 const displayedWebsite = document.getElementById("website");
 
+/**
+ * Sets the volume (gain) selected by the user and saves it to storage along with the current website
+ */
 async function setSelectedGain() {
     volumeOutput.textContent = volumeSlider.value + "%";
     
     const tab = await getCurrentTab();
     const website = new URL(tab.url).hostname;
-
     await setGain(tab, volumeSlider.value / 100);
 
     const websiteInfo = {
@@ -28,6 +30,7 @@ async function setSelectedGain() {
     chrome.storage.sync.set({ websites: [...websites] });
 }
 
+// Initial run and retrieval from storage
 volumeOutput.textContent = volumeSlider.value + "%";
 setSavedGain().then(async (gain) => {
     const tab = await getCurrentTab();
