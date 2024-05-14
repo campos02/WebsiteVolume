@@ -1,5 +1,8 @@
 import { setSavedGain, setGain, getCurrentTab } from "../modules/set-gain.js";
 
+const MAX_BOOSTED_VOLUME = 800;
+const MAX_VOLUME = 100;
+
 const boostCheckbox = document.getElementById("boost-checkbox");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeOutput = document.getElementById("volume");
@@ -13,11 +16,11 @@ async function setSelectedGain() {
     
     const tab = await getCurrentTab();
     const website = new URL(tab.url).hostname;
-    await setGain(tab, volumeSlider.value / 100);
+    await setGain(tab, volumeSlider.value / MAX_VOLUME);
 
     const websiteInfo = {
         website: website,
-        gain: volumeSlider.value / 100
+        gain: volumeSlider.value / MAX_VOLUME
     }
 
     const websites = new Set((await chrome.storage.sync.get(["websites"])).websites);
@@ -39,22 +42,22 @@ setSavedGain().then(async (gain) => {
     displayedWebsite.innerText = website;
 
     if (gain > 1) {
-        volumeSlider.max = 800;
+        volumeSlider.max = MAX_BOOSTED_VOLUME;
         boostCheckbox.checked = true;
     }
     
-    volumeSlider.value = gain * 100;
+    volumeSlider.value = gain * MAX_VOLUME;
     volumeOutput.textContent = volumeSlider.value + "%";
 });
 
 boostCheckbox.oninput = async () => {
     if (boostCheckbox.checked)
-        volumeSlider.max = 800;
+        volumeSlider.max = MAX_BOOSTED_VOLUME;
     else {
-        volumeSlider.max = 100;
+        volumeSlider.max = MAX_VOLUME;
         volumeOutput.textContent = volumeSlider.value + "%";
 
-        if (volumeSlider.value == 100)
+        if (volumeSlider.value == MAX_VOLUME)
             await setSelectedGain();
     }
 };
