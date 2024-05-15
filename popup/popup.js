@@ -41,6 +41,7 @@ setSavedGain().then(async (gain) => {
 
     displayedWebsite.innerText = website;
 
+    // If volume is boosted
     if (gain > 1) {
         volumeSlider.max = MAX_BOOSTED_VOLUME;
         boostCheckbox.checked = true;
