@@ -9,6 +9,17 @@ export async function getCurrentTab() {
 }
 
 /**
+ * Retrieves from storage the last saved website with the current hostname
+ * @returns Retrieved website
+ */
+export async function getSavedWebsite() {
+    const tab = await getCurrentTab();
+    const hostname = new URL(tab.url).hostname;
+    const websites = (await chrome.storage.sync.get(["websites"])).websites;
+    return websites.findLast((site) => site.website === hostname);
+}
+
+/**
  * Sends a message for the offscreen document to set the provided gain on the provided tab and save it in storage
  * @param {tab} tab - Tab that will have its gain modified
  * @param {number} gain - Gain value to set
@@ -26,7 +37,7 @@ export async function setGain(tab, gain) {
         });
     }
 
-    const website = new URL(tab.url).hostname;
+    const hostname = new URL(tab.url).hostname;
     const capturedTabs = await chrome.tabCapture.getCapturedTabs();
     
     // If the provided tab isn't captured, start capturing and set its gain, otherwise just set the gain
@@ -34,27 +45,9 @@ export async function setGain(tab, gain) {
         const streamId = await chrome.tabCapture.getMediaStreamId({
             targetTabId: tab.id
         });
-        await chrome.runtime.sendMessage({ command: "captureSite", stream: streamId, website: website, gain: gain });
+        await chrome.runtime.sendMessage({ command: "captureSite", stream: streamId, website: hostname, gain: gain });
     }
     else {
-        await chrome.runtime.sendMessage({ command: "setGain", gain: gain, website: website });
+        await chrome.runtime.sendMessage({ command: "setGain", gain: gain, website: hostname });
     }
-}
-
-/**
- * Retrieves from storage the last saved gain value for the current website and sets it
- * @returns Retrieved gain value if found, otherwise returns a gain of 1
- */
-export async function setSavedGain() {
-    const websites = (await chrome.storage.sync.get(["websites"])).websites;
-    const tab = await getCurrentTab();
-    const website = new URL(tab.url).hostname;
-    const lastWebsite = websites.findLast((site) => site.website === website);
-
-    // Gain of 1, aka same volume, if not found
-    if (!lastWebsite)
-        return 1;
-
-    await setGain(tab, lastWebsite.gain);
-    return lastWebsite.gain;
 }

@@ -1,31 +1,37 @@
-import { setSavedGain, setGain, getCurrentTab } from "../modules/set-gain.js";
+import { getSavedWebsite, setGain, getCurrentTab } from "../modules/set-gain.js";
 
 const MAX_BOOSTED_VOLUME = 800;
 const MAX_VOLUME = 100;
+const MUTED = 0;
 
-const boostCheckbox = document.getElementById("boost-checkbox");
+const boostCheckbox = document.getElementById("boost-button");
+const muteCheckbox = document.getElementById("mute-button");
 const volumeSlider = document.getElementById("volume-slider");
 const volumeOutput = document.getElementById("volume");
 const displayedWebsite = document.getElementById("website");
 
 /**
- * Sets the volume (gain) selected by the user and saves it to storage along with the current website
+ * Sets the volume (gain) selected by the user and saves it to storage
  */
 async function setSelectedGain() {
     volumeOutput.textContent = volumeSlider.value + "%";
-    
     const tab = await getCurrentTab();
-    const website = new URL(tab.url).hostname;
-    await setGain(tab, volumeSlider.value / MAX_VOLUME);
+    const hostname = new URL(tab.url).hostname;
+
+    if (!muteCheckbox.checked)
+        await setGain(tab, volumeSlider.value / MAX_VOLUME);
+    else
+        await setGain(tab, MUTED);
 
     const websiteInfo = {
-        website: website,
-        gain: volumeSlider.value / MAX_VOLUME
+        website: hostname,
+        gain: volumeSlider.value / MAX_VOLUME,
+        muted: muteCheckbox.checked
     }
 
     const websites = new Set((await chrome.storage.sync.get(["websites"])).websites);
     for (const site of websites) {
-        if (site.website === website)
+        if (site.website === hostname)
             websites.delete(site);
     };
 
@@ -35,21 +41,33 @@ async function setSelectedGain() {
 
 // Initial run and retrieval from storage
 volumeOutput.textContent = volumeSlider.value + "%";
-setSavedGain().then(async (gain) => {
+getSavedWebsite().then(async (website) => {
     const tab = await getCurrentTab();
-    const website = new URL(tab.url).hostname;
-
-    displayedWebsite.innerText = website;
+    displayedWebsite.innerText = new URL(tab.url).hostname;
 
     // If volume is boosted
-    if (gain > 1) {
+    if (website.gain > 1) {
         volumeSlider.max = MAX_BOOSTED_VOLUME;
         boostCheckbox.checked = true;
     }
-    
-    volumeSlider.value = gain * MAX_VOLUME;
+
+    if (!website.muted) {
+        await setGain(tab, website.gain);
+        volumeSlider.value = website.gain * MAX_VOLUME;
+    }
+    else {
+        await setGain(tab, MUTED);
+        volumeSlider.value = MUTED;
+        muteCheckbox.checked = true;
+    }
+
     volumeOutput.textContent = volumeSlider.value + "%";
 });
+
+volumeSlider.oninput = async () => {
+    muteCheckbox.checked = false;
+    await setSelectedGain();
+};
 
 boostCheckbox.oninput = async () => {
     if (boostCheckbox.checked)
@@ -63,4 +81,17 @@ boostCheckbox.oninput = async () => {
     }
 };
 
-volumeSlider.oninput = setSelectedGain;
+muteCheckbox.oninput = async () => {
+    if (muteCheckbox.checked) {
+        // Set slider value only after calling gain function so the volume stored isn't saved over
+        await setSelectedGain();
+        volumeSlider.value = MUTED;
+    }
+    else {
+        const website = await getSavedWebsite();
+        volumeSlider.value = website.gain * MAX_VOLUME;
+        await setSelectedGain();
+    }
+
+    volumeOutput.textContent = volumeSlider.value + "%";
+}

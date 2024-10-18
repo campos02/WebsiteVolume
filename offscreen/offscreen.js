@@ -20,8 +20,8 @@ chrome.runtime.onMessage.addListener(async (request) => {
             }
         });
         const source = audioContext.createMediaStreamSource(media);
-
         const lastNode = gainNodes.findLast((node) => node.website === request.website);
+        
         // Connect node if found, otherwise create a new one
         if (lastNode !== undefined)
             source.connect(lastNode.node);
