@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
     "name": "Website Volume",
-    "description": "Changes the volume per website",
-    "version": "1.0.0",
+    "description": "Allows changing tab volume on per website basis",
+    "version": "1.1.0",
     "icons": {
         "16": "images/icon-16.png",
         "32": "images/icon-32.png",
@@ -21,7 +21,7 @@
     "commands": {
         "enable-gain": {
             "suggested_key": "Alt+Shift+S",
-            "description": "Enable the latest set gain on the current tab"
+            "description": "Enable the latest set volume on the current tab"
         }
     },
     "background": {
