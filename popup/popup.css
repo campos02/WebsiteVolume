@@ -37,7 +37,6 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 .volume-display input[type="range"] {
     width: 15rem;
-    margin-bottom: 0;
 }
 
 .volume-display output {
