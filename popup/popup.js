@@ -39,12 +39,15 @@ async function setSelectedGain() {
     chrome.storage.sync.set({ websites: [...websites] });
 }
 
-// Initial run and retrieval from storage
 volumeOutput.textContent = volumeSlider.value + "%";
+getCurrentTab().then((tab) => {
+    displayedWebsite.innerText = new URL(tab.url).hostname;
+});
+
+// Initial run and retrieval from storage
 getSavedWebsite().then(async (website) => {
     const tab = await getCurrentTab();
-    displayedWebsite.innerText = new URL(tab.url).hostname;
-
+    
     // If volume is boosted
     if (website.gain > 1) {
         volumeSlider.max = MAX_BOOSTED_VOLUME;
